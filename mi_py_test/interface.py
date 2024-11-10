@@ -31,5 +31,14 @@ class ShellFunction:
     
 class Api:           
             
+    def function_names(self) -> list[str]:
+        raise NotImplementedError()
+    
+    def shell_function_names(self) -> list[str]:
+        raise NotImplementedError()
+    
+    def function( self, name:str ) -> Union[Function, None]:
+        raise NotImplementedError()
+
     async def exec( self, function_name:str, args:Union[None, dict, DataObject] ) -> Union[None, Any]:
         raise NotImplementedError()

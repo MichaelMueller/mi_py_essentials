@@ -17,9 +17,6 @@ class Api(interface.Api):
             self._shell_functions[f.name()] = f
         return True
     
-    def has_function( self, name:str ) -> bool:
-        return name in self._functions
-    
     def function_names(self) -> list[str]:
         return self._functions.keys()
     
