@@ -42,6 +42,6 @@ class HelloWorldShellFunction(interface.ShellFunction):
         print(f"Hello World {args.name}")
 
     def name(self):
-        return "hello_world_shell_function"
+        return "hello_world"
 
 # test classes

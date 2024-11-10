@@ -1,5 +1,5 @@
 from typing import Union, Any
-
+import logging
 import mi_py_essentials.interface as interface
     
 class Api(interface.Api):           
@@ -9,8 +9,9 @@ class Api(interface.Api):
         self._shell_functions:dict[str, interface.ShellFunction] = {}
     
     def add_function( self, f:interface.Function ) -> bool:
-        if f.name() in self._functions:
-            return False
+        f = self.function( f.name() )
+        assert f == None, f'{f.name()} must be unique but already used by {f.__class__.__name__} class'
+    
         self._functions[f.name()] = f
         
         if self._is_shell_function( f ):
