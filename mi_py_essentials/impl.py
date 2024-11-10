@@ -8,15 +8,15 @@ class Api(interface.Api):
         self._functions:dict[str, interface.Function] = {}
         self._shell_functions:dict[str, interface.ShellFunction] = {}
     
-    def add_function( self, f:interface.Function ) -> bool:
-        f = self.function( f.name() )
-        assert f == None, f'{f.name()} must be unique but already used by {f.__class__.__name__} class'
+    def add_function( self, f:interface.Function ) -> "Api":
+        f_with_same_name = self.function( f.name() )
+        assert f_with_same_name == None, f'Functon name "{f.name()}" must be unique but is already used by {f_with_same_name.__class__.__name__} class'
     
         self._functions[f.name()] = f
         
         if self._is_shell_function( f ):
             self._shell_functions[f.name()] = f
-        return True
+        return self
     
     def function_names(self) -> list[str]:
         return self._functions.keys()
