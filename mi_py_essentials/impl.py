@@ -27,16 +27,16 @@ class Api(interface.Api):
     def function( self, name:str ) -> Union[interface.Function, None]:
         return self._functions[name] if name in self._functions else None
      
-    def remove_function( self, name:str ):
+    def remove_function( self, name:str ) -> "Api":
+        assert name in self._shell_functions, f'Function "{name}" must exist to be removed'
+        del self._functions[name]
         if name in self._shell_functions:
-            del self._functions[name]
-            if name in self._shell_functions:
-                del self._shell_functions[name]
-            return True
-        return False
+            del self._shell_functions[name]
+        return self
         
     async def exec( self, function_name:str, args:Union[None, dict, interface.DataObject] ) -> Union[None, Any]:
         f = self.function( function_name )
+        assert f != None, f'Function "{function_name}" must exist to be executed'
 
         if self._is_shell_function( f ):
             f:interface.ShellFunction = f
