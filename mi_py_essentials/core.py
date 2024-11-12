@@ -1,11 +1,15 @@
-import typing
+import typing, re
 from typing import get_type_hints, Union, get_origin, get_args, Any, TypedDict, get_type_hints
 import traceback
     
 # interfaces
+def camel_to_snake( camel_str:str ) -> str:
+    return re.sub(r'(?<!^)(?=[A-Z])', '_', camel_str).lower() 
+
 class Function:    
     def __init__(self, api:"Api") -> None:
         self._api = api
+        self._name = camel_to_snake( self.__class__.__name__ )
     
     def api(self) -> "Api":
         return self._api
@@ -14,7 +18,8 @@ class Function:
         raise NotImplementedError()    
     
     def name(self) -> str:        
-        return self.__class__.__name__
+        return self._name
+    
             
 class ShellFunction(Function):  
     def __init__(self, api:"Api") -> None:

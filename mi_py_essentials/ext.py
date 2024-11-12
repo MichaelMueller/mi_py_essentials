@@ -1,5 +1,5 @@
 # built-in
-import typing
+import typing, inspect
 from typing import get_type_hints, Union, get_origin, get_args, Any, TypedDict, Optional
 import argparse, sys, json, traceback
 
@@ -14,10 +14,10 @@ class Api(core.Api):
         self.add_function( ExecCommandLine(self) )
         
     async def object_to_schema( self, obj:Any ) -> dict:
-        return await self.exec( ObjectToSchema.__name__, locals() ) 
+        return await self.exec( inspect.currentframe().f_code.co_name, locals() ) 
       
     async def exec_command_line( self, command_line_args:list[str]=sys.argv ) -> dict:
-        return await self.exec( ExecCommandLine.__name__, locals() )          
+        return await self.exec( core.camel_to_snake( ExecCommandLine.__name__ ), locals() )          
 
 class ObjectToSchemaArgs(TypedDict):
     obj: Any
@@ -81,7 +81,7 @@ class ObjectToSchema(core.Function):
             schema["additionalProperties"] = self._python_type_to_json_schema(value_type)
             return schema
 
-        elif python_type in {int, float, str, bool}:
+        elif python_type in [int, float, str, bool]:
             schema["type"] = self._python_type_to_json_type(python_type)
             return schema
 
