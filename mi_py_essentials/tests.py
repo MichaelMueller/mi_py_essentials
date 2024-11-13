@@ -1,52 +1,29 @@
-from typing import Coroutine, Union, Any
+import sys, asyncio, os, logging
+from typing import Callable, Dict, Any, Optional, List, get_origin, get_args
 
-from dataclasses import dataclass
-from dataclasses_json import dataclass_json
+# local
+from mi_py_essentials import Test, AbstractTest, InMemoryActiveRecordTest, ActiveRecordFileTest, CmdProxyTest
 
-import mi_py_essentials.interface as interface
-import mi_py_essentials.abstract as abstract
-import mi_py_essentials.impl as impl
+class Tests(AbstractTest):
+    def __init__(self) -> None:
+        super().__init__()
+                
+    async def exec(self) -> bool:   
+        logging.basicConfig(
+            level=logging.DEBUG,  # Set the logging level
+            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',  # Define log message format
+            handlers=[
+                logging.StreamHandler()  # Output log messages to console
+            ])
+        tests_passed = await super().exec() 
+        sys.exit( 0 if tests_passed else 1 )
+        
+    def dependent_tests(self) -> list[Test]:
+        return [ InMemoryActiveRecordTest(), ActiveRecordFileTest(), CmdProxyTest() ]
+    
+    async def _exec(self) -> None:
+        pass
 
-# global run method
-async def run() -> bool:
-    api = impl.Api()
-    api.add_function( HelloWorldFunction() )
-    api.add_function( HelloWorldShellFunction() )
-
-    print( f'api.function_names(): {api.function_names()}')
-    print( f'api.shell_function_names(): {api.shell_function_names()}')
-
-    print( f'api.exec("hello_world", args=None): { await api.exec("hello_world", args=None) }')
-    print( 'api.exec("api.exec("hello_world_shell_function", args=\{"name": "Michi"}): ' + f'{ await api.exec("hello_world_shell_function", args={"name": "Michi"}) }')
-
-    print( f'HelloWorldShellFunctionArgs.json_schema(): {str(HelloWorldShellFunctionArgs.schema().dump())}')
-
-# test class implementations
-class HelloWorldFunction(interface.Function):
-
-    async def exec(self, api:interface.Api, args:Union[None, dict, interface.DataObject]):
-        print("Hello World")
-
-    def name(self):
-        return "hello_world"
-
-@dataclass_json
-@dataclass
-class HelloWorldShellFunctionArgs(interface.DataObject):
-    name: str
-
-    def json_schema(self) -> Coroutine[Any, Any, dict]:
-        return super().json_schema()
-
-class HelloWorldShellFunction(interface.ShellFunction):
-
-    def create_data_object_from_args( self, args:dict ) -> interface.DataObject:
-        return HelloWorldShellFunctionArgs.from_dict(args)
-
-    async def exec( self, api:interface.Api, args:HelloWorldShellFunctionArgs ):
-        print(f"Hello World {args.name}")
-
-    def name(self):
-        return "hello_world_shell_function"
-
-# test classes
+if __name__ == "__main__":
+    sys.path.insert( 0, os.path.dirname( os.path.dirname( __file__ ) ) )
+    asyncio.run( Tests().exec() )

@@ -1,2 +1,4 @@
 setuptools
 dataclasses_json
+aiofiles
+pyyaml

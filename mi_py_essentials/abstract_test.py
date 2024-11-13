@@ -2,12 +2,15 @@ from typing import Any
 import logging
 import traceback
 
-from .interface import Test
+from mi_py_essentials import Test
 
 class AbstractTest (Test):
     def __init__(self) -> None:
         super().__init__()
         
+    async def _exec(self) -> None:
+        raise NotImplementedError()
+    
     def dependent_tests(self) -> list[Test]:
         return []
         
@@ -26,26 +29,23 @@ class AbstractTest (Test):
         except Exception as e:
             # Catch all exceptions and print the stack trace
             traceback.print_exc()
-            print( f'****** {self.__class__.__name__} - FAILED with exception (see trace above)' )
+            print( f'****** {self.__class__.__name__} - FAILED with exception' )
             return False
     
     async def _tidy_up_if_needed(self) -> None:
         pass
-    
-    async def _exec(self):
-        raise NotImplementedError()
-        
+            
     def _assert( self, condition:bool, assertion_description:str ) -> None:
         if not condition:
             raise AssertionError( f'{assertion_description}' )
         else:
-            print(f'****** {self.__class__.__name__} - PASSED assertion {assertion_description} ')
+            print(f'****** {self.__class__.__name__} - Assertion PASSED: {assertion_description} ')
     
     def _check( self, condition:bool, check_description:str ):
         if not condition:
-            print( f'****** {self.__class__.__name__} - FAILED check {check_description}' )
+            print( f'****** {self.__class__.__name__} - Check FAILED: {check_description}' )
         else:
-            print(f'****** {self.__class__.__name__} - PASSED check {check_description}')
+            print(f'****** {self.__class__.__name__} - Check PASSED: {check_description}')
     
     def _expect_exception( self, func:callable, func_description:str, exception_class:type ) -> None:
         unexcepted_exception = None
@@ -54,7 +54,7 @@ class AbstractTest (Test):
             func()        
         except Exception as e:
             if isinstance(e, exception_class):                
-                print(f'****** {self.__class__.__name__} - PASSED expect exception {exception_class.__name__} when calling {func_description}')
+                print(f'****** {self.__class__.__name__} - Expected exception PASSED: {exception_class.__name__} when {func_description}')
             else:
                 unexcepted_exception = e
         
