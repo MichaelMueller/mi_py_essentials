@@ -2,7 +2,8 @@ import sys, asyncio, os, logging
 from typing import Callable, Dict, Any, Optional, List, get_origin, get_args
 
 # local
-from mi_py_essentials import Test, AbstractTest, InMemoryActiveRecordTest, ActiveRecordFileTest, CmdProxyTest
+sys.path.insert( 0, os.path.dirname( os.path.dirname( __file__ ) ) )
+from mi_py_essentials import Test, AbstractTest, InMemoryActiveRecordTest, ActiveRecordFileTest, CmdProxyTest, InteractiveCmdProxyTest
 
 class Tests(AbstractTest):
     def __init__(self) -> None:
@@ -19,11 +20,10 @@ class Tests(AbstractTest):
         sys.exit( 0 if tests_passed else 1 )
         
     def dependent_tests(self) -> list[Test]:
-        return [ InMemoryActiveRecordTest(), ActiveRecordFileTest(), CmdProxyTest() ]
+        return [ InMemoryActiveRecordTest(), ActiveRecordFileTest(), CmdProxyTest(), InteractiveCmdProxyTest() ]
     
     async def _exec(self) -> None:
         pass
 
 if __name__ == "__main__":
-    sys.path.insert( 0, os.path.dirname( os.path.dirname( __file__ ) ) )
     asyncio.run( Tests().exec() )
