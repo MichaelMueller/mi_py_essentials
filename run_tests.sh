@@ -27,6 +27,8 @@ if [ ! -d "venv" ]; then
     $PYTHON -m venv venv
     echo "Virtual environment created."
 
+    source venv/bin/activate
+
     # Install requirements if requirements.txt exists
     if [ -f "requirements.txt" ]; then
         echo "Installing requirements from requirements.txt..."
@@ -39,15 +41,7 @@ if [ ! -d "venv" ]; then
     fi        
 fi
 
-# Activate virtual environment based on OS
-if [[ "$OSTYPE" == "linux-gnu"* || "$OSTYPE" == "darwin"* ]]; then
-    source venv/bin/activate
-elif [[ "$OSTYPE" == "msys"* || "$OSTYPE" == "cygwin"* ]]; then
-    source venv/Scripts/activate
-else
-    echo "Unsupported OS type."
-    exit 1
-fi
+source venv/bin/activate
 
 # Execute Python script with parameters passed to this shell script
 echo "Executing ..."
