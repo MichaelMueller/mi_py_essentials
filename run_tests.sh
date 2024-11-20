@@ -31,6 +31,8 @@ if [ ! -d "venv" ]; then
     if [ -f "requirements.txt" ]; then
         echo "Installing requirements from requirements.txt..."
         pip install -r requirements.txt
+        pip install -e .
+
         echo "Requirements installed."
     else
         echo "No requirements.txt found. Skipping dependency installation."

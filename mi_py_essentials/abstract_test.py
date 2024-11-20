@@ -16,6 +16,7 @@ class AbstractTest (Test):
             loop = asyncio.get_event_loop()
             # Run the synchronous tempfile.mkdtemp in a thread pool to make it non-blocking
             self._tmp_dir = await loop.run_in_executor(None, tempfile.mkdtemp)
+            self._print(f'Created tmp dir "{self._tmp_dir}"')
         return self._tmp_dir
     
     def dependent_tests(self) -> list[Test]:
@@ -41,7 +42,8 @@ class AbstractTest (Test):
     
     async def _tidy_up_if_needed(self) -> None:
         if self._tmp_dir:
-            loop = asyncio.get_event_loop()
+            loop = asyncio.get_event_loop()            
+            self._print(f'Deleting tmp dir "{self._tmp_dir}"')
             await loop.run_in_executor(None, lambda: shutil.rmtree(self._tmp_dir))
             
     def _assert( self, condition:bool, assertion_description:str ) -> None:
