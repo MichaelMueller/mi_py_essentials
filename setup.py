@@ -12,7 +12,6 @@ setup(
     name='mi_py_essentials',               # Replace with your package's name
     version='0.2.3',
     packages=find_packages(),        # Automatically find sub
-    requires=parse_requirements(),
     install_requires=parse_requirements(),
     author='Michael Mueller',
     author_email='michaelmuelleronline@gmx.de',
