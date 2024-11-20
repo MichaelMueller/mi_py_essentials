@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
-def parse_requirements(filename):
-    with open(filename, "r") as file:
+def parse_requirements():
+    with open("requirements.txt", "r") as file:
         return [line.strip() for line in file if line and not line.startswith('#')]
     
 def parse_description_from_readme() -> str:
