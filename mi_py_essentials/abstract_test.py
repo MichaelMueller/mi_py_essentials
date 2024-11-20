@@ -1,15 +1,22 @@
 from typing import Any
-import logging
-import traceback
+import tempfile, asyncio, traceback, shutil
 
 from mi_py_essentials import Test
 
 class AbstractTest (Test):
     def __init__(self) -> None:
         super().__init__()
+        self._tmp_dir = None
         
     async def _exec(self) -> None:
         raise NotImplementedError()
+    
+    async def tmp_dir(self) -> str:
+        if not self._tmp_dir:    
+            loop = asyncio.get_event_loop()
+            # Run the synchronous tempfile.mkdtemp in a thread pool to make it non-blocking
+            self._tmp_dir = await loop.run_in_executor(None, tempfile.mkdtemp)
+        return self._tmp_dir
     
     def dependent_tests(self) -> list[Test]:
         return []
@@ -33,7 +40,9 @@ class AbstractTest (Test):
             return False
     
     async def _tidy_up_if_needed(self) -> None:
-        pass
+        if self._tmp_dir:
+            loop = asyncio.get_event_loop()
+            await loop.run_in_executor(None, lambda: shutil.rmtree(self._tmp_dir))
             
     def _assert( self, condition:bool, assertion_description:str ) -> None:
         if not condition:
