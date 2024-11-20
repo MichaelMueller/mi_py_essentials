@@ -72,6 +72,20 @@ class AbstractTest (Test):
         if unexcepted_exception is not None:
             raise unexcepted_exception
         
+    async def _expect_async_exception( self, func:callable, func_description:str, exception_class:type, args:dict=None ) -> None:
+        unexcepted_exception = None
+        
+        try:
+            await func(**args) if args else await func()        
+        except Exception as e:
+            if isinstance(e, exception_class):                
+                print(f'****** {self.__class__.__name__} - Expected exception PASSED: {exception_class.__name__} when {func_description}')
+            else:
+                unexcepted_exception = e
+        
+        if unexcepted_exception is not None:
+            raise unexcepted_exception
+        
     def _print(self, msg):
         print( f'****** {self.__class__.__name__} - {msg}' )
         
