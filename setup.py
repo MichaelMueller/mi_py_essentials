@@ -10,7 +10,7 @@ def parse_description_from_readme() -> str:
 
 setup(
     name='mi_py_essentials',               # Replace with your package's name
-    version='0.2.3',
+    version='0.2.4',
     packages=find_packages(),        # Automatically find sub
     install_requires=parse_requirements(),
     author='Michael Mueller',
