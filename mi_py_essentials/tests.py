@@ -2,28 +2,29 @@ import sys, asyncio, os, logging
 from typing import Callable, Dict, Any, Optional, List, get_origin, get_args
 
 # local
-sys.path.insert( 0, os.path.dirname( os.path.dirname( __file__ ) ) )
-from mi_py_essentials import Test, AbstractTest, InMemoryActiveRecordTest, ActiveRecordFileTest, CmdProxyTest, InteractiveCmdProxyTest
-
-class Tests(AbstractTest):
-    def __init__(self) -> None:
-        super().__init__()
-                
-    async def exec(self) -> bool:   
-        logging.basicConfig(
-            level=logging.DEBUG,  # Set the logging level
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',  # Define log message format
-            handlers=[
-                logging.StreamHandler()  # Output log messages to console
-            ])
-        tests_passed = await super().exec() 
-        sys.exit( 0 if tests_passed else 1 )
-        
-    def dependent_tests(self) -> list[Test]:
-        return [ InMemoryActiveRecordTest(), ActiveRecordFileTest(), CmdProxyTest(), InteractiveCmdProxyTest() ]
+parent_dir = os.path.dirname( __file__ )
+# module_name = os.path.splitext(os.path.basename(__file__))[0]
+package_dir = os.path.dirname( parent_dir )
+if not package_dir in sys.path:
+    sys.path.insert( 0, os.path.dirname( os.path.dirname( __file__ ) ) )
     
-    async def _exec(self) -> None:
-        pass
+package_name = os.path.basename( parent_dir )
+__package__ = package_name
+
+from mi_py_essentials import Test, InMemoryActiveRecordTest, ActiveRecordFileTest, CmdAppTest, InteractiveCmdAppTest
+
+class Tests(Test):
+    def __init__(self) -> None:
+        super().__init__(None)
+                   
+    def name( self ) -> str:
+        return f"{package_name}.{self.__class__.__name__}"
+        
+    async def _exec(self) -> bool:
+        return await InMemoryActiveRecordTest(self).exec() \
+            and await ActiveRecordFileTest(self).exec() \
+            and await CmdAppTest(self).exec() \
+            and await InteractiveCmdAppTest(self).exec() 
 
 if __name__ == "__main__":
     asyncio.run( Tests().exec() )
