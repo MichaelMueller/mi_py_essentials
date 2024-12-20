@@ -36,7 +36,7 @@ class CliApp(Function):
         parser = argparse.ArgumentParser(description=self._description)
         parser.add_argument("function_name", choices=self._functions.keys(), help="The function to execute")
         parser.add_argument("-l", "--log_level", type=str, choices=["notset", "debug", "info", "warn", "error"], default="info", help="The basic log level")
-        parser.add_argument("-lf", "--log_filter", type=str, default=None, help="A optional regex that removes matching log lines")
+        parser.add_argument("-lf", "--log_filter", type=str, default=None, help="An optional regex that removes matching log lines")
 
         partial_args, _ = parser.parse_known_args() if self._args == None else parser.parse_known_args(self._args)
         
