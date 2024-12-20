@@ -1,7 +1,10 @@
 import sys, asyncio, os, logging
 from typing import Callable, Dict, Any, Optional, List, get_origin, get_args
-
-from mi_py_essentials import Test, InMemoryActiveRecordTest, ActiveRecordFileTest, CliAppTest
+# local
+from .test import Test
+from .cli_app_test import CliAppTest
+from .active_record_file_test import ActiveRecordFileTest
+from .in_memory_active_record_test import InMemoryActiveRecordTest
 from .cli_function_test import CliFunctionTest
 from .interactive_cli_function_test import InteractiveCliFunctionTest
 

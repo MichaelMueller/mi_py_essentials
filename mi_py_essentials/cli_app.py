@@ -34,9 +34,7 @@ class CliApp(Function):
     async def exec(self) -> Any:
         """Execute a function by parsing arguments based on the function's type hints."""
         parser = argparse.ArgumentParser(description=self._description)
-        parser.add_argument("function_name", choices=self._functions.keys(), help="The function to execute")
-        parser.add_argument("-l", "--log_level", type=str, choices=["notset", "debug", "info", "warn", "error"], default="info", help="The basic log level")
-        parser.add_argument("-lf", "--log_filter", type=str, default=None, help="An optional regex that removes matching log lines")
+        self._setup_std_args( parser, self._functions.keys(), "The name of the function to be executed")
 
         partial_args, _ = parser.parse_known_args() if self._args == None else parser.parse_known_args(self._args)
         
@@ -52,8 +50,10 @@ class CliApp(Function):
         func_name = partial_args.function_name
         func = self._functions[func_name]
         def parser_cb( parser:argparse.ArgumentParser ):
-            parser.add_argument("function_name", choices=func_name, help=func_name)
-        
+            self._setup_std_args(parser, [ func_name ], func_name)        
         return await CliFunction(func, args=self._args, parser_cb=parser_cb).exec()
 
-
+    def _setup_std_args( self, parser:argparse.ArgumentParser, funcs:list[str], func_help ) -> None:
+        parser.add_argument("function_name", choices=funcs, help=func_help)
+        parser.add_argument("-l", "--log_level", type=str, choices=["notset", "debug", "info", "warn", "error"], default="info", help="The basic log level")
+        parser.add_argument("-lf", "--log_filter", type=str, default=None, help="An optional regex that removes matching log lines")

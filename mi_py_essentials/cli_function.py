@@ -21,6 +21,7 @@ class CliFunction(Function):
                     
         # Build a new parser for function arguments
         sig = inspect.signature(func)
+        known_args:list[str] = []
         for name, param in sig.parameters.items():
             # Determine argument type and default value
             arg_type = param.annotation if param.annotation != param.empty else str
@@ -45,11 +46,15 @@ class CliFunction(Function):
                 nargs=nargs,                    
                 help=f"{arg_type.__name__} argument"
             )
+            known_args.append(name)
 
         # Parse function-specific arguments
         func_args = parser.parse_args() if self._args is None else parser.parse_args( self._args )
         func_kwargs = vars(func_args)
+        known_kwargs = {}
+        for key in func_kwargs.keys():
+            if key in known_args:
+                known_kwargs[key] = func_kwargs[key]
 
         # Call the function with parsed arguments, excluding 'function_name'
-        func_kwargs.pop("function_name", None)
-        return await func(**func_kwargs) if inspect.iscoroutinefunction(func) else func(**func_kwargs)
+        return await func(**known_kwargs) if inspect.iscoroutinefunction(func) else func(**known_kwargs)
