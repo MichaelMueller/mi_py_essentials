@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mi_py_essentials"
-version = "0.3.2"
+version = "0.3.3"
 authors = [
     { name = "Michael Mueller", email = "michaelmuelleronline@gmx.de" }
 ]
