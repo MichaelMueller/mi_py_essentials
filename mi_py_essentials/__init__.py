@@ -8,4 +8,5 @@ from .cli_function import CliFunction
 from .cli_app import CliApp
 from .interactive_cli_function import InteractiveCliFunction
 from .py_bootloader import PyBootLoader
+from .util import Util
 
