@@ -1,0 +1,27 @@
+[build-system]
+requires = [
+    "setuptools>=42",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mi_py_essentials"
+version = "0.3.1"
+authors = [
+    { name = "Michael Mueller", email = "michaelmuelleronline@gmx.de" }
+]
+description = "A Python essentials library" # Adjust this to match the actual description if needed
+readme = "README.md"
+license = { text = "MIT" } # Specify your license here if available
+homepage = "https://github.com/MichaelMueller/mi_py_essentials_lib.git"
+
+[project.urls]
+"Source Code" = "https://github.com/MichaelMueller/mi_py_essentials_lib.git"
+
+[tool.setuptools]
+packages = ["find:"]
+
+[tool.setuptools.dynamic]
+# Dynamically loads dependencies from requirements.txt
+dependencies = { file = "requirements.txt" }
