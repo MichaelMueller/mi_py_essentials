@@ -7,13 +7,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mi_py_essentials"
-version = "0.3.1"
+version = "0.3.2"
 authors = [
     { name = "Michael Mueller", email = "michaelmuelleronline@gmx.de" }
 ]
 description = "A Python essentials library" # Adjust this to match the actual description if needed
 readme = "README.md"
-license = { text = "MIT" } # Specify your license here if available
+license = { text = "Apache-2.0" } # Specify your license here if available
 
 [project.urls]
 "Source Code" = "https://github.com/MichaelMueller/mi_py_essentials_lib.git"
