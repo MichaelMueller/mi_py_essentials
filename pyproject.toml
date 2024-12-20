@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mi_py_essentials"
-version = "0.3.4"
+version = "0.3.5"
 authors = [
     { name = "Michael Mueller", email = "michaelmuelleronline@gmx.de" }
 ]
@@ -23,4 +23,4 @@ where = ["."]
 
 [tool.setuptools.dynamic]
 # Dynamically loads dependencies from requirements.txt
-dependencies = { file = "requirements.txt" }
+dependencies = { file = ["requirements.txt"] }
