@@ -23,13 +23,13 @@ class PyBootLoader:
         else:
             print(f"Virtual environment '{venv_dir}' already exists.")
             
-            """Activate the virtual environment and run the specified script."""
-            python_executable = os.path.join(venv_dir, "bin", "python") if os.name != "nt" else os.path.join(venv_dir, "Scripts", "python.exe")
+        """Activate the virtual environment and run the specified script."""
+        python_executable = os.path.join(venv_dir, "bin", "python") if os.name != "nt" else os.path.join(venv_dir, "Scripts", "python.exe")
 
-            is_script = os.path.exists(script_or_code)
-                
-            if is_script:
-                subprocess.check_call([python_executable, script_or_code])
-            else:
-                subprocess.check_call([python_executable, "-c", script_or_code])
+        is_script = os.path.exists(script_or_code)
+            
+        if is_script:
+            subprocess.check_call([python_executable, script_or_code])
+        else:
+            subprocess.check_call([python_executable, "-c", script_or_code])
                 
