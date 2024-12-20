@@ -3,3 +3,4 @@ dataclasses_json
 pyyaml
 aiofiles
 aioconsole
+pyyaml
