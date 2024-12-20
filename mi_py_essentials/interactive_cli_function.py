@@ -1,42 +1,26 @@
-import inspect
-from typing import Callable, Dict, Any, Optional, List, get_origin, get_args
+from typing import Any, Callable, Awaitable, get_origin, get_args
+import argparse, logging, inspect
+# pip
+import aioconsole
+# local
+from .function import Function
 
-class InteractiveCmdApp:
-    def __init__(self, description="undefined"):
-        self._functions: Dict[str, Callable] = {}
-        self._description = description
-        self._input_func = input
+class InteractiveCliFunction(Function):
+    
+    def __init__(self, func:callable):
+        super().__init__()
+        self._func = func
+        self._input_func:Callable[[str], Awaitable[str] ] = aioconsole.ainput
+               
+    async def exec(self) -> Any:
+        func:callable = self._func
+        desc = inspect.getdoc( func )
+        func_name = func.__name__
 
-    def add_function(self, func: Callable, name: Optional[str] = None) -> "InteractiveCmdApp":
-        name = name or func.__name__
-        assert name not in self._functions, f'Function "{name}" already exists.'
-        self._functions[name] = func
-        return self
+        print(f'Executing "{func_name}" interactively')
+        if desc:
+            print(f'Description: {desc}')
 
-    def remove_function(self, func_name: str) -> bool:
-        if func_name in self._functions:
-            del self._functions[func_name]
-            return True
-        return False
-
-    async def exec(self, func_name:Optional[str]=None):
-        if not self._functions:
-            print("No functions have been added.")
-            return
-
-        # List available functions
-        if not func_name:
-            print("Available functions:")
-            for name in self._functions:
-                print(f" - {name}")
-            
-            # Prompt user to select a function
-            func_name = self._input_func("Enter the name of the function to execute: ").strip()
-        if func_name not in self._functions:
-            print(f"Function '{func_name}' does not exist.")
-            return
-
-        func = self._functions[func_name]
         sig = inspect.signature(func)
         func_kwargs = {}
 
@@ -48,11 +32,12 @@ class InteractiveCmdApp:
             # Prompt for the argument value
             while True:
                 try:
-                    raw_input = self._input_func(
+                    raw_input = await self._input_func(
                         f"Enter value for '{name}' ({arg_type.__name__})"
                         + (f" [default={param.default}]" if not is_required else "")
                         + ": "
-                    ).strip()
+                    )
+                    raw_input = raw_input.strip()
 
                     # Handle default values
                     if not raw_input and not is_required:

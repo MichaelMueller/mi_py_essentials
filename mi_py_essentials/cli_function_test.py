@@ -14,8 +14,11 @@ class CliFunctionTest(Test):
             return op1+op2
         
         async def heavy_add( op1:float, op2:float ) -> float:
-            asyncio.sleep(0.1)
+            await asyncio.sleep(0.1)
             return op1+op2
         
         two_plus_two_point_one = await CliFunction( add, ["1.0", "2.1"] ).exec()
         self._check( two_plus_two_point_one == 3.1, f'two_plus_two_point_one == 3.1, got {two_plus_two_point_one}')
+        
+        async_two_plus_two_point_one = await CliFunction( heavy_add, ["1.0", "2.1"] ).exec()
+        self._check( async_two_plus_two_point_one == 3.1, f'async_two_plus_two_point_one == 3.1, got {async_two_plus_two_point_one}')

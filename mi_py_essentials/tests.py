@@ -11,8 +11,9 @@ if not package_dir in sys.path:
 package_name = os.path.basename( parent_dir )
 __package__ = package_name
 
-from mi_py_essentials import Test, InMemoryActiveRecordTest, ActiveRecordFileTest, CmdAppTest, InteractiveCmdAppTest
+from mi_py_essentials import Test, InMemoryActiveRecordTest, ActiveRecordFileTest, CliAppTest
 from .cli_function_test import CliFunctionTest
+from .interactive_cli_function_test import InteractiveCliFunctionTest
 
 class Tests(Test):
     def __init__(self) -> None:
@@ -24,9 +25,9 @@ class Tests(Test):
     async def _exec(self) -> bool:
         return await InMemoryActiveRecordTest(self).exec() \
             and await ActiveRecordFileTest(self).exec() \
-            and await CmdAppTest(self).exec() \
-            and await InteractiveCmdAppTest(self).exec() \
-            and await CliFunctionTest(self).exec()
+            and await CliAppTest(self).exec() \
+            and await CliFunctionTest(self).exec()\
+            and await InteractiveCliFunctionTest(self).exec()
 
 if __name__ == "__main__":
-    asyncio.run( Tests().exec() )
+    asyncio.run( Tests.exec() )

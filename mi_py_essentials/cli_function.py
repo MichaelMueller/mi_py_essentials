@@ -5,19 +5,20 @@ from .function import Function
 
 class CliFunction(Function):
     
-    def __init__(self, func:callable, args:list[str]|None=None):
+    def __init__(self, func:callable, args:list[str]|None=None, parser_cb:Callable[[argparse.ArgumentParser], None]|None=None):
         super().__init__()
         self._func = func
         self._args = args
+        self._parser_cb = parser_cb
                
     async def exec(self) -> Any:
         func:callable = self._func
         desc = inspect.getdoc( func )
-        func_name = func.__name__
         """Execute a function by parsing arguments based on the function's type hints."""
         parser = argparse.ArgumentParser(description=desc)
-        parser.add_argument("function_name", choices=[func_name], help=func_name)        
-        
+        if self._parser_cb != None:
+            self._parser_cb( parser )
+                    
         # Build a new parser for function arguments
         sig = inspect.signature(func)
         for name, param in sig.parameters.items():

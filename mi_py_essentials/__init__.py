@@ -10,11 +10,8 @@ from .active_record_file_test import ActiveRecordFileTest
 from .in_memory_active_record import InMemoryActiveRecord
 from .in_memory_active_record_test import InMemoryActiveRecordTest
 
-from .cmd_app import CmdApp
-from .cmd_app_test import CmdAppTest
-
-from .interactice_cmd_app import InteractiveCmdApp
-from .interactice_cmd_app_test import InteractiveCmdAppTest
+from .cli_app import CliApp
+from .cli_app_test import CliAppTest
 
 from .tests import Tests
 

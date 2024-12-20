@@ -7,10 +7,10 @@ def parse_requirements():
 def parse_description_from_readme() -> str:
     with open("README.md", "r") as file:
         return file.read().splitlines()[1]
-
+    
 setup(
     name='mi_py_essentials',               # Replace with your package's name
-    version='0.2.5',
+    version='0.3.0',
     packages=find_packages(),        # Automatically find sub
     install_requires=parse_requirements(),
     author='Michael Mueller',
