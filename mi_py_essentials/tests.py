@@ -12,6 +12,7 @@ package_name = os.path.basename( parent_dir )
 __package__ = package_name
 
 from mi_py_essentials import Test, InMemoryActiveRecordTest, ActiveRecordFileTest, CmdAppTest, InteractiveCmdAppTest
+from .cli_function_test import CliFunctionTest
 
 class Tests(Test):
     def __init__(self) -> None:
@@ -24,7 +25,8 @@ class Tests(Test):
         return await InMemoryActiveRecordTest(self).exec() \
             and await ActiveRecordFileTest(self).exec() \
             and await CmdAppTest(self).exec() \
-            and await InteractiveCmdAppTest(self).exec() 
+            and await InteractiveCmdAppTest(self).exec() \
+            and await CliFunctionTest(self).exec()
 
 if __name__ == "__main__":
     asyncio.run( Tests().exec() )

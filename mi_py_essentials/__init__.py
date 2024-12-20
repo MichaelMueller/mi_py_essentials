@@ -1,6 +1,6 @@
 from .test import Test
 from .log import Log
-from .functor import Functor
+from .function import Function
 
 from .active_record import ActiveRecord
 
