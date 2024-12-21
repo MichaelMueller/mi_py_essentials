@@ -37,14 +37,9 @@ class CliApp(Function):
         self._setup_std_args( parser, self._functions.keys(), "The name of the function to be executed")
 
         partial_args, _ = parser.parse_known_args() if self._args == None else parser.parse_known_args(self._args)
-        
+                
         # Set up basic logging
-        Log.set_log_level( partial_args.log_level )
-        
-        # Set up regex!
-        log_filter = partial_args.log_filter
-        if log_filter != None:
-            Log.add_filter( log_filter )
+        Log.setup( partial_args.log_level, partial_args.log_filter )
             
         # Parse the function name first to know which function to add args for
         func_name = partial_args.function_name
