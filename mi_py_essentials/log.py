@@ -20,6 +20,8 @@ class Log:
         console_handler.setFormatter(formatter)
 
         # Add the handler to the root logger
+        for handler in root_logger.handlers:
+            root_logger.removeHandler( handler )
         root_logger.addHandler(console_handler)
         
         # Set up regex!
