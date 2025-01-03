@@ -11,10 +11,15 @@ class CliApp(Function):
         self._functions: Dict[str, Callable] = {}
         self._description = description
         self._args = args
+        self._default_function = None
 
     def set_args( self, args:list[str] ) -> "CliApp":
         self._args = args
         return self
+    
+    def set_default_function( self, name:str ) -> "CliApp":
+        self._default_function = name
+        return self 
 
     def add_function(self, func: callable, name:Optional[str]=None) -> "CliApp":
         name = name or func.__name__
@@ -49,6 +54,6 @@ class CliApp(Function):
         return await CliFunction(func, args=self._args, parser_cb=parser_cb).exec()
 
     def _setup_std_args( self, parser:argparse.ArgumentParser, funcs:list[str], func_help ) -> None:
-        parser.add_argument("function_name", choices=funcs, help=func_help)
+        parser.add_argument("function_name", choices=funcs, help=func_help, default=self._default_function)
         parser.add_argument("-l", "--log_level", type=str, choices=["notset", "debug", "info", "warn", "error"], default="info", help="The basic log level")
         parser.add_argument("-lf", "--log_filter", type=str, default=None, help="An optional regex that removes matching log lines")
