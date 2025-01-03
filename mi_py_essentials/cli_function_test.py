@@ -44,7 +44,7 @@ class CliFunctionTest(Test):
         # testing args from file
         tmp_file = ( await self.tmp_dir() ) + "/calc_args.json"
         self._print(f'writing to json file "{tmp_file}"')
-        await AsyncUtils.write_json( tmp_file, args.model_dump() )
+        await AsyncUtils().write_json( tmp_file, args.model_dump() )
         two_plus_two_with_pydantic_model = await CliFunction( calc, [args.model_dump_json()] ).exec()
         self._check( two_plus_two_with_pydantic_model == 4, f'two_plus_two_with_pydantic_model == 4, got {two_plus_two_with_pydantic_model}')
 

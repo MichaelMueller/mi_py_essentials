@@ -7,6 +7,7 @@ from .active_record_file_test import ActiveRecordFileTest
 from .in_memory_active_record_test import InMemoryActiveRecordTest
 from .cli_function_test import CliFunctionTest
 from .interactive_cli_function_test import InteractiveCliFunctionTest
+from .packager_test import PackagerTest
 
 class Tests(Test):
     def __init__(self) -> None:
@@ -22,4 +23,5 @@ class Tests(Test):
             and await ActiveRecordFileTest(self).exec() \
             and await CliAppTest(self).exec() \
             and await CliFunctionTest(self).exec()\
-            and await InteractiveCliFunctionTest(self).exec()
+            and await InteractiveCliFunctionTest(self).exec()\
+            and await PackagerTest(self).exec()

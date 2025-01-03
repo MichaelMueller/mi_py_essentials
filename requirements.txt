@@ -1,6 +1,5 @@
-setuptools
-dataclasses_json
+# Python version requirement
+pydantic
 pyyaml
 aiofiles
 aioconsole
-pydantic
