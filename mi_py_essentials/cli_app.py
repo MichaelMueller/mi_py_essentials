@@ -55,7 +55,7 @@ class CliApp(Function):
 
     def _setup_std_args( self, parser:argparse.ArgumentParser, funcs:list[str], func_help ) -> None:
         if self._default_function != None:
-            parser.add_argument("--function_name", type=StopIteration, help=func_help, default=self._default_function)
+            parser.add_argument("--function_name", type=str, help=func_help, default=self._default_function)
         else:
             parser.add_argument("function_name", choices=funcs, help=func_help)
             

@@ -10,7 +10,7 @@ class Packager(Function):
     
     class Args(pydantic.BaseModel):
         output_zip:str
-        requirements_file:Optional[str]
+        requirements_file:Optional[str]=None
         additional_files:Dict[str, str]={}
         temp_dir_path:Optional[str]=None
         minpy:Optional[tuple]=None
