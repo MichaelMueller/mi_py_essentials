@@ -84,7 +84,9 @@ class Packager(Function):
 
             # Create a zip file of the .venv directory
             output_zip = self._args.output_zip
-            os.makedirs(os.path.dirname(output_zip), exist_ok=True)
+            output_dir = os.path.dirname(output_zip)
+            if output_dir:
+                os.makedirs(output_dir, exist_ok=True)
             logging.debug(f"Packaging minimal virtual environment into '{output_zip}'...")
             with zipfile.ZipFile(output_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
                 for root, dirs, files in os.walk(temp_dir_path):
